@@ -1,0 +1,35 @@
+version: '3.4'
+services:
+  db: 
+    container_name: invoices_db
+    image: postgres:12.8-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=invoices_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - MAX_CONNECTIONS=300
+    ports: 
+      - "54325:5432"
+    networks: 
+      - zlx-network
+  invoices-app:
+    container_name: invoices_app_back
+    image: invoices-app
+    restart: always
+    build: .
+#    working_dir: .
+    environment:
+      SPRING_BOOT_ENVIRONMENT: Production
+    ports: 
+      - "9090:9090"
+    command: mvn spring-boot:run
+    links:
+      - db
+    depends_on:
+      - db
+    networks: 
+      - zlx-network
+networks:
+    zlx-network:
+        driver: bridge

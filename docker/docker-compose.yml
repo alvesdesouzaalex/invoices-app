@@ -1,0 +1,13 @@
+version: '2'
+services:
+
+  postgres:
+    container_name: invoices_db_local
+    image: postgres:12.8-alpine
+    ports:
+      - "54325:5432"
+    environment:
+      - POSTGRES_DB=invoices_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - MAX_CONNECTIONS=300
